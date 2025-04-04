@@ -14,33 +14,28 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      id-token: write # Needed for auth with Deno Deploy
-      contents: read  # Needed to clone the repository
+      id-token: write
+      contents: read
 
     steps:
-      - name: Clone repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Deno
-        uses: denoland/setup-deno@v2
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
         with:
-          deno-version: v1.x  # usa v1.x para máxima compatibilidad con deployctl
+          deno-version: v1.x
 
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
+      - name: Cache dependencies
+        run: deno cache main.ts
 
-      - name: Install step
-        run: deno task build
-
-      - name: Upload to Deno Deploy
-        uses: denoland/deployctl@v1
-        with:
-          project: "ivn23n-p1-front-59"
-          entrypoint: "main.ts"  # cambia a main.ts si ese es tu archivo
-          root: "."
+      - name: Deploy
+        run: |
+          deno run -A https://deno.land/x/deploy/deployctl.ts deploy \
+          --project=ivn23n-p1-front-59 \
+          main.ts
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
+
 
           
