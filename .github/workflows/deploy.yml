@@ -38,7 +38,7 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: "ivn23n-p1-front-59"
-          entrypoint: "main.tsx"  # cambia a main.ts si ese es tu archivo
+          entrypoint: "main.ts"  # cambia a main.ts si ese es tu archivo
           root: "."
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
